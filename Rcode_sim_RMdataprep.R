@@ -10,6 +10,7 @@ install.packages("ismev")
 install.packages("lmom")
 install.packages("QRM")
 install.packages("skewt")
+install.packages("plotrix")
 
 library("rugarch")
 library("fGarch")
@@ -19,6 +20,7 @@ library("ismev")
 library("lmom")
 library("QRM")
 library("skewt")
+library("plotrix")
 
 source("Rfns.R")
 

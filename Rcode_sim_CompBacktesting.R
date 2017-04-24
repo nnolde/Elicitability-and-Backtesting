@@ -2,10 +2,8 @@
 # Comparative backtesting analysis of the simulation data
 # Data generating process: AR(1)-GARCH(1,1) with skewed t innovations
 # ===================================================
-library(plotrix) #color2D.matplot
 
 source("Rcode_sim_RMdataprep.R")
-source("Rfns.R")
 
 ### ===================================================
 ### Traffic light matrices (method in row is the standard one)

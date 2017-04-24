@@ -1,6 +1,18 @@
 ## Investigation of the impact of a small out-of-sample size on the results
 ## of forecasting performance comparisons based on consistent scoring rules
 
+install.packages("rugarch")
+install.packages("fGarch")
+install.packages("MASS")
+install.packages("expectreg")
+install.packages("ismev")
+install.packages("lmom")
+install.packages("QRM")
+install.packages("skewt")
+install.packages("reshape2")
+install.packages("plotrix")
+
+
 library("rugarch")
 library("fGarch")
 library("MASS")
@@ -9,8 +21,8 @@ library("ismev")
 library("lmom")
 library("QRM")
 library("skewt")
-library(reshape2)
-library(plotrix)
+library("reshape2")
+library("plotrix")
 
 source("Rfns.R")
 
@@ -60,14 +72,7 @@ flag.t <- 0 #flag to see if nu.hat <=2
 
 ## =======================================================================
 
-#B=1000 # number of samples to simulate and analyse
-B=250
-B=50
-
-B=1 # test run
-#seeds<-list(NULL) # storage of random seeds used for simulating the DGP
-
-# to reproduce results, use: .Random.seed<-seeds[[i]] for particular i
+B=1000 # number of samples to simulate and analyse
 
 ## =======================================================================
 ## Output matrices to scote average score values for each simulated sample
@@ -88,8 +93,6 @@ viol.a <- viol.b <-matrix(nrow=B,ncol=10)
 
 ## =======================================================================
 
-j=12
-
 for (j in 1:B){
   
   simdat=simDGP(N=n+w, seed=j)
@@ -99,9 +102,6 @@ for (j in 1:B){
   mut=tail(simdat$mut,n)
   sigt=tail(simdat$sigt,n)
   # seeds[[j]] <- simdat$seed
-  
- # if(j==1) plot(x,type="l")
- # lines(x,col=j)
   
   # =======================================================
   # Forecasting assuming normal innovations
@@ -294,92 +294,8 @@ save(sbarEXP1a,sbarEXP1b,sbarEXP0a,sbarEXP0b, file="sim1000_sbarEXP.RDATA")
 save(sbarVaRES1a,sbarVaRES1b,sbarVaRES0a,sbarVaRES0b, file="sim1000_sbarVaRES.RDATA")
 save(viol.a,viol.b,file="sim1000_viol.RDATA")
 
-
-save(sbarVaR1a,sbarVaR1b,sbarVaR0a,sbarVaR0b, file="sim250_sbarVaR.RDATA")
-save(sbarEXP1a,sbarEXP1b,sbarEXP0a,sbarEXP0b, file="sim250_sbarEXP.RDATA")
-save(sbarVaRES1a,sbarVaRES1b,sbarVaRES0a,sbarVaRES0b, file="sim250_sbarVaRES.RDATA")
-save(viol.a,viol.b,file="sim250_viol.RDATA")
 ##======================================================================
 ## Analysis of the output 
-
-## merging the datasets from the virtual machines
-
-### VaR .99
-load("sim250_sbarVaR.RDATA") 
-sbarVaR1.a <- sbarVaR1a
-sbarVaR0.a <- sbarVaR0a
-sbarVaR1.b <- sbarVaR1b
-sbarVaR0.b <- sbarVaR0b
-
-load("sim250_sbarVaR_vm1.RDATA")
-sbarVaR1.a <- rbind(sbarVaR1.a,sbarVaR1a)
-sbarVaR0.a <- rbind(sbarVaR0.a,sbarVaR0a)
-sbarVaR1.b <- rbind(sbarVaR1.b,sbarVaR1b)
-sbarVaR0.b <- rbind(sbarVaR0.b,sbarVaR0b)
-
-load("sim250_sbarVaR_vm2.RDATA")
-sbarVaR1.a <- rbind(sbarVaR1.a,sbarVaR1a)
-sbarVaR0.a <- rbind(sbarVaR0.a,sbarVaR0a)
-sbarVaR1.b <- rbind(sbarVaR1.b,sbarVaR1b)
-sbarVaR0.b <- rbind(sbarVaR0.b,sbarVaR0b)
-
-load("sim250_sbarVaR_vm3.RDATA")
-sbarVaR1.a <- rbind(sbarVaR1.a,sbarVaR1a)
-sbarVaR0.a <- rbind(sbarVaR0.a,sbarVaR0a)
-sbarVaR1.b <- rbind(sbarVaR1.b,sbarVaR1b)
-sbarVaR0.b <- rbind(sbarVaR0.b,sbarVaR0b)
-
-### (VaR,ES)_0.975
-
-load("sim250_sbarVaRES.RDATA")
-sbarVaRES1.a <- sbarVaRES1a
-sbarVaRES0.a <- sbarVaRES0a
-sbarVaRES1.b <- sbarVaRES1b
-sbarVaRES0.b <- sbarVaRES0b
-
-load("sim250_sbarVaRES_vm1.RDATA")
-sbarVaRES1.a <- rbind(sbarVaRES1.a,sbarVaRES1a)
-sbarVaRES0.a <- rbind(sbarVaRES0.a,sbarVaRES0a)
-sbarVaRES1.b <- rbind(sbarVaRES1.b,sbarVaRES1b)
-sbarVaRES0.b <- rbind(sbarVaRES0.b,sbarVaR0b)
-
-load("sim250_sbarVaRES_vm2.RDATA")
-sbarVaRES1.a <- rbind(sbarVaRES1.a,sbarVaRES1a)
-sbarVaRES0.a <- rbind(sbarVaRES0.a,sbarVaRES0a)
-sbarVaRES1.b <- rbind(sbarVaRES1.b,sbarVaRES1b)
-sbarVaRES0.b <- rbind(sbarVaRES0.b,sbarVaR0b)
-
-load("sim250_sbarVaRES_vm3.RDATA")
-sbarVaRES1.a <- rbind(sbarVaRES1.a,sbarVaRES1a)
-sbarVaRES0.a <- rbind(sbarVaRES0.a,sbarVaRES0a)
-sbarVaRES1.b <- rbind(sbarVaRES1.b,sbarVaRES1b)
-sbarVaRES0.b <- rbind(sbarVaRES0.b,sbarVaR0b)
-
-### %-violations
-load("sim250_viol.RDATA")
-viol_a <- viol.a
-viol_b <- viol.b
-
-load("sim250_viol_vm1.RDATA")
-viol_a <- rbind(viol_a, viol.a)
-viol_b <- rbind(viol_b, viol.b)
-
-load("sim250_viol_vm2.RDATA")
-viol_a <- rbind(viol_a, viol.a)
-viol_b <- rbind(viol_b, viol.b)
-
-load("sim250_viol_vm3.RDATA")
-viol_a <- rbind(viol_a, viol.a)
-viol_b <- rbind(viol_b, viol.b)
-
-viol.a <- viol_a; viol.b <- viol_b
-
-## saving combined data - for Johanna
-save(sbarVaR1.a,sbarVaR0.a,sbarVaR1.b,sbarVaR0.b,file="sim250_sbarVaR_all.RDATA")
-save(sbarVaRES1.a,sbarVaRES0.a,sbarVaRES1.b,sbarVaRES0.b,file="sim250_sbarVaRES_all.RDATA")
-
-
-##======================================================================
 
 colnames(sbarVaR1.a) <- colnames(sbarVaR1.b) <-method
 colnames(sbarVaR0.a) <- colnames(sbarVaR0.b) <- method
@@ -418,14 +334,8 @@ datviol = cbind(viol.a,viol.b)
 datVaRESa = cbind(rankVaRES1a,rankVaRES0a)[,c(1,11,2,12,3,13,4,14,5,15,6,16,7,17,8,18,9,19,10,20)]
 datVaRESb = cbind(rankVaRES1b,rankVaRES0b)[,c(1,11,2,12,3,13,4,14,5,15,6,16,7,17,8,18,9,19,10,20)]
 
-# datVaRESb = cbind(rankVaRES1b,rankVaRES0b[72:1000,])[,c(1,11,2,12,3,13,4,14,5,15,6,16,7,17,8,18,9,19,10,20)]
-
-
 atvec=(1:29)[-c(3,6,9,12,15,18,21,24,27)]
 bpcol=rep(c("white","gray"),10)
-
-#postscript(file="plot_sim250VaR_sbs.eps", width=12, height=8, horizontal=FALSE)
-# par(mfrow=c(2,1))
 
 postscript(file="plot_sim250VaR.eps", width=14, height=8, horizontal=FALSE)
 
@@ -502,7 +412,7 @@ rankVaRES0b.star <- c(10,8,7,9,6,5,2,4,3,1)
 
 B=dim(rankVaR1a)[1] # number of samples generated
 
-## Johanna's combined statistic
+## Combined statistic
 sum.abs <- function(x) sum(abs(x))
 
 se.VaR1a = apply(rankVaR1a - matrix(rep(rankVaR1a.star,B),byrow=TRUE, nrow=B),1,"sum.abs")
@@ -618,62 +528,3 @@ outVaR = cbind(method,and,round(apply(VaRout,1,"mean"),3),and,round(viol.b*100,2
                round(sbarVaR0b,4)[1,],lbr,rank(sbarVaR0b),rbr)
 for(i in 1:4) outVaR=cbind(outVaR,and,round(cctVaR[,i],3))
 
-
-for(i in 1:(nm)) cat(outVaR[i,],"\\\\ \n")
-
-n-FP   & 0.724 & 0.8 & 0.0077 ( 1 ) & -0.0033 ( 1 ) & 0.723 & 0.348 & 0.639 & 0.958 \\ 
-n-FHS  & 0.901 & 0.0 & 0.0090 ( 6 ) & -0.0018 ( 3 ) &  -  &  -  & 1.000  & 1.000  \\ 
-n-EVT  & 0.899 & 0.0 & 0.0090 ( 5 ) & -0.0017 ( 6 ) &  -  &  -  & 1.000  & 1.000 \\ 
-t-FP   & 0.753 & 0.4 & 0.0077 ( 2 ) & -0.0031 ( 2 ) & 0.135 & 0.204 & 0.933 & 1.000\\ 
-t-FHS  & 0.896 & 0.0 & 0.0090 ( 4 ) & -0.0017 ( 4 ) &  -  &  -  & 1.000 & 1.000\\ 
-t-EVT  & 0.887 & 0.0 & 0.0089 ( 3 ) & -0.0017 ( 5 ) &  -  &  -  & 1.000 & 1.000\\ 
-st-FP  & 0.925 & 0.0 & 0.0093 ( 9 ) & -0.0012 ( 9 ) &  -  &  -  & 1.000 & 1.000\\ 
-st-FHS & 0.914 & 0.0 & 0.0091 ( 8 ) & -0.0014 ( 8 ) &  -  &  -  & 1.000 & 1.000 \\ 
-st-EVT & 0.902 & 0.0 & 0.0090 ( 7 ) & -0.0015 ( 7 ) &  -  &  -  & 1.000 & 1.000 \\ 
-opt    & 1.085 & 0.0 & 0.0109 ( 10 ) & 0.0006 ( 10 ) &  -  &  -  & 1.000 & 1.000 \\ 
-
-## (VaR,ES)
-sigt.norm = matrix(rep(sigt.n,3), nrow=3,byrow=TRUE)
-sigt.std = matrix(rep(sigt.t,3), nrow=3,byrow=TRUE)
-sigt.sstd = matrix(rep(sigt.st,3), nrow=3,byrow=TRUE)
-sigt.mat = rbind(sigt.norm,sigt.std,sigt.sstd,sigt)
-
-ESout=t(ESmat[,11:20])
-VaR2out=t(VaR2mat[,11:20])
-cct = matrix(nrow=nm, ncol=4) # p-values for conditional calibration tests for (VaR,ES) pairs
-for(i in 1:nm)
-{
-  rr=cbind(VaR2out[i,], ESout[i,])
-  tmp1=cct.twosided2(x=y, r=rr, lev=nvec[2],sigt=sigt.mat[i,],hac=hac)
-  tmp2=cct.onesided2(x=y, r=rr, lev=nvec[2],sigt=sigt.mat[i,],hac=hac)
-  cct[i,] = c(tmp1$pv.avg,tmp1$pv.cond,tmp2$pv.avg,tmp2$pv.cond)
-}
-
-round(cct,3)
-
-outES = cbind(method,and,round(apply(ESout,1,"mean"),3),and,and,
-               round(sbarVaRES1b,4)[1,],lbr,rank(sbarVaRES1b),rbr,and,
-               round(sbarVaRES0b,4)[1,],lbr,rank(sbarVaRES0b),rbr)
-for(i in 1:4) outES=cbind(outES,and,round(cct[,i],3))
-for(i in 1:(nm)) cat(outES[i,],"\\\\ \n")
-
-n-FP   & 0.728 & & 0.0204 ( 1 ) & -0.0108 ( 1 ) & 0.285 & 0.123 & 1.000 & 1.000 \\ 
-n-FHS  & 0.949 & & 0.0209 ( 2 ) & -0.0092 ( 2 ) & 0.000 & 0.102 & 0.091 & 0.215 \\ 
-n-EVT  & 0.954 & & 0.0210 ( 5 ) & -0.0091 ( 5 ) & 0.000 & 0.200 & 0.005 & 0.013 \\ 
-t-FP   & 1.135 & & 0.0211 ( 6 ) & -0.0081 ( 9 ) & 0.000 & 0.010 & 1.000 & 1.000 \\ 
-t-FHS  & 0.943 & & 0.0209 ( 4 ) & -0.0092 ( 3 ) & 0.000 & 0.032 & 0.859 & 1.000 \\ 
-t-EVT  & 0.947 & & 0.0209 ( 3 ) & -0.0091 ( 4 ) & 0.000 & 0.109 & 0.091 & 0.227 \\ 
-st-FP  & 0.951 & & 0.0213 ( 9 ) & -0.0082 ( 8 ) & 0.000 & 0.159 & 0.005 & 0.013 \\ 
-st-FHS & 0.965 & & 0.0211 ( 8 ) & -0.0086 ( 7 ) & 0.000 & 0.107 & 0.091 & 0.208 \\ 
-st-EVT & 0.970 & & 0.0211 ( 7 ) & -0.0086 ( 6 ) & 0.000 & 0.103 & 0.091 & 0.203 \\ 
-opt    & 1.147 & & 0.0225 ( 10 ) & -0.0050 ( 10 ) & 0.000 & 0.317 & 0.000 & 0.000 \\ 
-
-
-##======================================================================
-## recovering the overwritten data
-load("sim250_sbarVaR_all.RDATA")
-sbarVaR1.a<-sbarVaR1.a[1:250,]
-sbarVaR0.a<-sbarVaR0.a[1:250,]
-sbarVaR1.b<-sbarVaR1.b[1:250,]
-sbarVaR0.b<-sbarVaR0.b[1:250,]
-save(sbarVaR1.a,sbarVaR0.a,sbarVaR1.b,sbarVaR0.b,file="sim250_sbarVaR.RDATA")

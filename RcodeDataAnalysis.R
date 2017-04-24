@@ -1,6 +1,17 @@
 # Illustration of backtesting and method comparison methodologies 
 # using the NASDAQ Composite index
 
+install.packages("rugarch")
+install.packages("fGarch")
+install.packages("MASS")
+install.packages("expectreg")
+install.packages("ismev")
+install.packages("lmom")
+install.packages("QRM")
+install.packages("skewt")
+install.packages("plotrix")
+
+
 library("rugarch")
 library("fGarch")
 library("MASS")
@@ -9,7 +20,7 @@ library("ismev")
 library("lmom")
 library("QRM")
 library("skewt")
-library(plotrix) #color2D.matplot
+library("plotrix") 
 
 source("Rfns.R")
 

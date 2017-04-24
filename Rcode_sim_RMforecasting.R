@@ -2,6 +2,15 @@
 # Risk measures considered: VaR_alpha, tau-expectile and (VaR_nu, ES_nu)
 # Levels of risk measures are chosen to have roughly the same magnitude under the standard normal distribution
 
+install.packages("rugarch")
+install.packages("fGarch")
+install.packages("MASS")
+install.packages("expectreg")
+install.packages("ismev")
+install.packages("lmom")
+install.packages("QRM")
+install.packages("skewt")
+
 library("rugarch")
 library("fGarch")
 library("MASS")
