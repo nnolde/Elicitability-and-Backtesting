@@ -1,6 +1,16 @@
 # Assembling data on risk measure estimation for Simulation (AR(1)-GARCH(1,1) with skewed t innovations)
 # This is to be used for tests and other related analyses
 
+
+install.packages("rugarch")
+install.packages("fGarch")
+install.packages("MASS")
+install.packages("expectreg")
+install.packages("ismev")
+install.packages("lmom")
+install.packages("QRM")
+install.packages("skewt")
+
 library("rugarch")
 library("fGarch")
 library("MASS")
