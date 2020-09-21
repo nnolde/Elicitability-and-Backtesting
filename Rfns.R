@@ -132,6 +132,60 @@ var.asymp <- function(x,M=0)
 }
 
 # ===========================================================
+# Test of equal forecasting performance between two forecasts
+# Reference: Gneiting & Ranjan (2011), 
+# J. Business and Economic Statistics 29(3), pp.411-422
+
+# k=1 # lead time for the forecast; only 1-step-ahead forecasts are considered
+
+# Inputs: 
+# s1 and s2: scoring functions for method 1 and 2
+# type: "two-sided", "one-sided-ge” or "one-sided-le"
+# ===========================================================
+
+
+efp.test <- function(s1,s2,type="two-sided")
+{
+	d=s1-s2 # differences in scores
+	n=length(d)
+	
+# HAC estimator for the asymptotic variance of the average relative scores
+# HAC: heteroskedasticity and autocorrelation-consistent variance estimator
+# using Parzen window as the lag window (set of weights)
+# M: trancation point, set to approx. 2sqrt(n)	
+	m=ceiling(2*sqrt(n))
+	gam = acf(d,lag.max=m,type="covariance",plot=F,na.action = na.fail)$acf
+	k1 = 1:ceiling(m/2)
+	k2 = (ceiling(m/2)+1):m
+	
+	lam = c(1, 2*(1-6*(k1/m)^2+6*(k1/m)^3),2*2*(1-k2/m)^3)
+	sn = sqrt(gam %*% lam)
+	
+	# sn = sqrt(sum(d^2)/n) # assumes zero correlation
+
+	# test statistic
+	tn=sqrt(n)*(mean(d))/sn
+	if (type == "two-sided")
+	{
+		pv=2*ifelse(tn<0,pnorm(tn),(1-pnorm(tn))) #p-value for two-sided hypothesis
+	}
+	if (type == "one-sided-ge")
+	{
+		pv= pnorm(tn)
+	}
+	if (type == "one-sided-le")
+	{
+		pv= 1-pnorm(tn)
+	}
+#	cat("mean=", mean(d),"; var=", var(d), ";sn=",sn, "\n")
+	return(list(tn=tn,pvalue=pv,sn=sn))	
+}
+
+
+
+
+
+# ===========================================================
 # Tests of the fit using likelihood ratios for VaR violations
 # ===========================================================
 
